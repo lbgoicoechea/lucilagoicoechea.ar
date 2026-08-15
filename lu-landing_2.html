@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucila Goicoechea — Producto & Operaciones</title>
+<meta name="description" content="Espacio personal de Lucila Goicoechea: ingeniera en producto y operaciones. Historia, libros y contacto.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================
+     TOKENS
+  ============================================ */
+  :root{
+    --brown-deep:   #37505F;
+    --brown-mid:    #5F87A3;
+    --olive-deep:   #8C6B4E;
+    --olive-mid:    #E3C79B;
+    --cream:        #FAFAF8;
+    --paper:        #FAFAF8;
+    --butter:       #EFE0C8;
+    --gold:         #D08A5C;
+    --rust:         #A8C6DB;
+    --sage:         #8C6B4E;
+    --clay:         #D08A5C;
+
+    --ink:          #37505F;
+    --ink-soft:     rgba(55,80,95,0.66);
+    --ink-faint:    rgba(55,80,95,0.42);
+    --light:        #FAFAF8;
+    --light-soft:   rgba(250,250,248,0.78);
+    --light-faint:  rgba(250,250,248,0.5);
+
+    --serif: "Lora", Georgia, "Times New Roman", serif;
+    --sans:  "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    /* Espacio reservado para tu foto de fondo del hero.
+       Para usarla: reemplazá "none" por  url('tu-foto.jpg')  */
+    --hero-photo: none;
+
+    --edge: 6vw;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  img{ max-width:100%; display:block; }
+
+  a{ color:inherit; }
+
+  ::selection{ background:var(--gold); color:var(--brown-deep); }
+
+  a:focus-visible,
+  button:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:4px;
+    border-radius:2px;
+  }
+
+  h1,h2,h3{
+    font-family:var(--serif);
+    font-weight:500;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+  }
+
+  .container{
+    max-width:1180px;
+    margin:0 auto;
+    padding-left:var(--edge);
+    padding-right:var(--edge);
+  }
+
+  section{ position:relative; }
+
+  /* ============================================
+     GRAIN TEXTURE (para las secciones oscuras)
+  ============================================ */
+  .textured::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:0.28;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ============================================
+     MASTHEAD (aparece al hacer scroll)
+  ============================================ */
+  .masthead{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:50;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:22px var(--edge);
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.05rem;
+    color:var(--light);
+    pointer-events:none;
+    opacity:0;
+    transform:translateY(-8px);
+    transition:opacity 0.4s ease, transform 0.4s ease;
+    mix-blend-mode:difference;
+  }
+  .masthead.is-visible{ opacity:1; transform:translateY(0); }
+  .masthead a{ pointer-events:auto; text-decoration:none; }
+  .masthead nav{ display:flex; gap:28px; margin-right:104px; font-family:var(--sans); font-style:normal; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; }
+  .masthead nav a{ text-decoration:none; opacity:0.85; }
+  .masthead nav a:hover{ opacity:1; }
+  @media (max-width:640px){ .masthead nav{ display:none; } }
+
+  /* ============================================
+     SELECTOR DE IDIOMA (siempre visible)
+  ============================================ */
+  .lang-switch{
+    position:fixed;
+    top:18px;
+    right:var(--edge);
+    z-index:60;
+    display:flex;
+    gap:2px;
+    padding:4px;
+    background:rgba(55,80,95,0.55);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    border-radius:999px;
+    border:1px solid rgba(250,250,248,0.18);
+  }
+  .lang-switch button{
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    padding:7px 13px;
+    border-radius:999px;
+    font-family:var(--sans);
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    color:rgba(250,250,248,0.68);
+    transition:background 0.25s ease, color 0.25s ease;
+  }
+  .lang-switch button:hover:not(.active){ color:var(--light); }
+  .lang-switch button.active{
+    background:var(--cream);
+    color:var(--brown-deep);
+  }
+
+  /* ============================================
+     HERO
+  ============================================ */
+  .hero{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    color:var(--light);
+    background-image:
+      linear-gradient(180deg, rgba(55,80,95,0.12) 0%, rgba(55,80,95,0.5) 78%, rgba(55,80,95,0.78) 100%),
+      var(--hero-photo),
+      linear-gradient(155deg, var(--brown-deep) 0%, var(--brown-mid) 45%, var(--olive-deep) 100%);
+    background-size:cover;
+    background-position:center;
+    background-blend-mode:normal, normal, normal;
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:2;
+    padding:14vh var(--edge) 9vh;
+    max-width:920px;
+  }
+
+  .hero h1{
+    font-size:clamp(2.1rem, 4.6vw, 3.9rem);
+    font-weight:400;
+    color:var(--light);
+  }
+  .hero-greeting{
+    display:block;
+    font-family:var(--sans);
+    font-weight:300;
+    font-size:0.36em;
+    letter-spacing:0.02em;
+    color:var(--light-soft);
+    margin-bottom:8px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--butter);
+    font-weight:500;
+  }
+
+  .hero-sub{
+    margin-top:28px;
+    max-width:540px;
+    font-size:clamp(1rem, 1.3vw, 1.15rem);
+    font-weight:300;
+    color:var(--light-soft);
+  }
+
+  .hero-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:40px;
+  }
+  .hero-links .pill{ margin-top:0; }
+
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:44px;
+    padding:15px 30px;
+    border-radius:999px;
+    background:var(--cream);
+    color:var(--brown-deep);
+    font-family:var(--sans);
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.02em;
+    text-decoration:none;
+    border:1px solid transparent;
+    transition:background 0.25s ease, transform 0.25s ease;
+  }
+  .pill:hover{ background:var(--butter); transform:translateY(-2px); }
+  .pill svg{ width:14px; height:14px; transition:transform 0.25s ease; }
+  .pill:hover svg{ transform:translateY(2px); }
+
+  /* ============================================
+     REVEAL ON SCROLL (progressive enhancement)
+  ============================================ */
+  .reveal{ opacity:1; transform:none; }
+  .js-ready .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .js-ready .reveal.in-view{ opacity:1; transform:none; }
+
+  /* ============================================
+     SECTION: MI HISTORIA
+  ============================================ */
+  .historia{
+    background:var(--cream);
+    color:var(--ink);
+    padding:11vh var(--edge);
+  }
+  .historia-grid{
+    max-width:1180px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:0.85fr 1.15fr;
+    gap:64px;
+  }
+  .historia h2{
+    font-size:clamp(2.1rem, 3.6vw, 3.1rem);
+    color:var(--brown-deep);
+    position:sticky;
+    top:120px;
+    align-self:start;
+  }
+  .historia-text{
+    border-left:1px solid rgba(55,80,95,0.16);
+    padding-left:48px;
+  }
+  .historia-text p{
+    font-size:1.08rem;
+    color:var(--ink-soft);
+    max-width:560px;
+  }
+  .historia-text p + p{ margin-top:20px; }
+
+  @media (max-width:840px){
+    .historia-grid{ grid-template-columns:1fr; gap:28px; }
+    .historia h2{ position:static; }
+    .historia-text{ border-left:none; padding-left:0; border-top:1px solid rgba(55,80,95,0.16); padding-top:28px; }
+  }
+
+  /* ============================================
+     SECTION: LIBROS
+  ============================================ */
+  .libros{
+    background:var(--butter);
+    padding:11vh var(--edge);
+  }
+  .libros .section-head{
+    max-width:640px;
+    margin:0 auto 64px;
+    text-align:center;
+  }
+  .libros h2{
+    font-size:clamp(2.1rem, 3.6vw, 3.1rem);
+    color:var(--brown-deep);
+  }
+  .libros h2 .subtitle{
+    display:block;
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:400;
+    font-size:0.5em;
+    color:var(--ink-soft);
+    margin-top:8px;
+  }
+
+  .book-shelf{
+    max-width:760px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
+  }
+  .book{
+    display:flex;
+    flex-direction:column;
+    transition:transform 0.3s ease;
+  }
+  .book:nth-child(odd){ transform:rotate(-0.6deg); }
+  .book:nth-child(even){ transform:rotate(0.6deg); }
+  .book:hover{ transform:translateY(-6px) rotate(0deg); }
+
+  .book-cover{
+    position:relative;
+    overflow:hidden;
+    aspect-ratio:2 / 3;
+    border-radius:3px 8px 8px 3px;
+    box-shadow:0 14px 24px -14px rgba(55,80,95,0.45), inset -6px 0 0 rgba(0,0,0,0.12);
+    margin-bottom:16px;
+    display:flex;
+    align-items:flex-end;
+    padding:14px;
+  }
+  .book-cover::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:60%;
+    background:linear-gradient(to top, rgba(55,80,95,0.6), rgba(55,80,95,0));
+    pointer-events:none;
+  }
+  .book-cover span{
+    position:relative;
+    z-index:1;
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--paper);
+    font-size:0.78rem;
+  }
+
+  .book h3{
+    font-size:1.02rem;
+    font-weight:500;
+    color:var(--brown-deep);
+    line-height:1.3;
+  }
+  .book .autor{
+    font-size:0.8rem;
+    color:var(--ink-faint);
+    margin-top:2px;
+  }
+  .book .nota{
+    margin-top:10px;
+    font-size:0.86rem;
+    color:var(--ink-soft);
+    line-height:1.55;
+  }
+
+  @media (max-width:640px){
+    .book-shelf{ grid-template-columns:1fr 1fr; max-width:480px; gap:20px; }
+    .book-shelf .book:last-child{ grid-column:1 / -1; max-width:220px; margin:0 auto; }
+  }
+
+  .book-more{
+    max-width:1180px;
+    margin:52px auto 0;
+    text-align:center;
+  }
+  .book-more summary{
+    cursor:pointer;
+    list-style:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:13px 26px;
+    border-radius:999px;
+    border:1px solid rgba(55,80,95,0.22);
+    font-family:var(--sans);
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--brown-deep);
+    transition:background 0.25s ease, border-color 0.25s ease;
+  }
+  .book-more summary::-webkit-details-marker{ display:none; }
+  .book-more summary::marker{ content:""; }
+  .book-more summary:hover{ background:rgba(55,80,95,0.06); border-color:rgba(55,80,95,0.4); }
+  .book-more summary .chevron{ width:13px; height:13px; transition:transform 0.25s ease; }
+  .book-more[open] summary .chevron{ transform:rotate(180deg); }
+  .book-more[open] summary{ margin-bottom:40px; }
+  .book-shelf--more{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:28px;
+  }
+  .book-shelf--more .book{ width:210px; }
+
+  /* ============================================
+     SECTION: CONTACTO (bookend oscuro)
+  ============================================ */
+  .contacto{
+    background:linear-gradient(200deg, var(--olive-deep), var(--brown-deep) 70%);
+    color:var(--light);
+    padding:16vh var(--edge) 8vh;
+    text-align:center;
+  }
+  .contacto h2{
+    margin-top:18px;
+    font-size:clamp(2.4rem, 6vw, 4.2rem);
+    color:var(--light);
+  }
+
+  .contact-links{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-top:44px;
+  }
+  .contact-links a{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 26px;
+    border-radius:999px;
+    border:1px solid rgba(250,250,248,0.3);
+    text-decoration:none;
+    font-size:0.88rem;
+    font-weight:700;
+    color:var(--light);
+    transition:background 0.25s ease, border-color 0.25s ease;
+  }
+  .contact-links a:hover{
+    background:rgba(250,250,248,0.1);
+    border-color:rgba(250,250,248,0.6);
+  }
+  .contact-links a.filled{
+    background:var(--cream);
+    color:var(--brown-deep);
+    border-color:var(--cream);
+  }
+  .contact-links a.filled:hover{ background:var(--butter); }
+
+  footer.foot{
+    margin-top:12vh;
+    padding-top:28px;
+    border-top:1px solid rgba(250,250,248,0.14);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    font-size:0.78rem;
+    color:var(--light-faint);
+    letter-spacing:0.02em;
+  }
+
+  /* ============================================
+     GENERIC RESPONSIVE TWEAKS
+  ============================================ */
+  @media (max-width:640px){
+    :root{ --edge:6.5vw; }
+    .hero-inner{ padding-top:20vh; }
+    .historia, .libros, .contacto{ padding-top:9vh; padding-bottom:9vh; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Selector de idioma -->
+<div class="lang-switch">
+  <button type="button" data-lang-btn="es" class="active" aria-label="Ver sitio en español">ES</button>
+  <button type="button" data-lang-btn="en" aria-label="View site in English">EN</button>
+</div>
+
+<!-- Membrete fijo, aparece al scrollear -->
+<div class="masthead" id="masthead">
+  <a href="#top">Lu</a>
+  <nav>
+    <a href="#historia" data-i18n="nav.about">Mí</a>
+    <a href="#libros" data-i18n="nav.books">Libros</a>
+    <a href="#contacto" data-i18n="nav.contact">Contacto</a>
+  </nav>
+</div>
+
+<!-- ============================================
+     HERO
+     Espacio para foto: seteá --hero-photo en :root
+     ej. --hero-photo: url('foto.jpg');
+============================================ -->
+<header class="hero textured" id="top">
+  <div class="hero-inner">
+    <h1 data-i18n-html="hero.heading"><span class="hero-greeting">Hola,</span>Soy <em>Lucila Goicoechea</em>.</h1>
+    <p class="hero-sub" data-i18n="hero.sub">Ingeniera con un máster en negocios y tecnología, y más de 5 años de experiencia en producto y operaciones.</p>
+    <div class="hero-links">
+      <a class="pill" href="https://www.linkedin.com/in/lucila-goicoechea/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="pill" href="mailto:lgoicoechea@itba.edu.ar">Email</a>
+      <a class="pill" href="https://github.com/lbgoicoechea" target="_blank" rel="noopener noreferrer">Github</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================
+     1. UN POCO DE MÍ
+============================================ -->
+<section class="historia" id="historia">
+  <div class="historia-grid">
+    <h2 class="reveal" data-i18n="historia.heading">Mi historia</h2>
+    <div class="historia-text reveal">
+      <p data-i18n="historia.p1">Arranqué mi recorrido en producto y, con el tiempo, migré hacia operaciones y datos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     2. LIBROS QUE ME INSPIRAN
+============================================ -->
+<section class="libros" id="libros">
+  <div class="section-head reveal">
+    <h2 data-i18n-html="libros.heading">Libros que me inspiran<br><span class="subtitle">(y recomiendo)</span></h2>
+  </div>
+
+  <div class="book-shelf">
+    <div class="book reveal">
+      <div class="book-cover" style="background:var(--brown-mid);"><span>Harari</span></div>
+      <h3 data-i18n="book1.title">Sapiens</h3>
+      <p class="autor">Yuval Noah Harari</p>
+      <p class="nota" data-i18n="book1.note">El que más me hizo cambiar la forma de ver todo lo demás.</p>
+    </div>
+    <div class="book reveal">
+      <div class="book-cover" style="background:var(--olive-mid);"><span>Clear</span></div>
+      <h3 data-i18n="book2.title">Hábitos atómicos</h3>
+      <p class="autor">James Clear</p>
+      <p class="nota" data-i18n="book2.note">Lo tengo más marcado que cualquier manual de la oficina.</p>
+    </div>
+    <div class="book reveal">
+      <div class="book-cover" style="background:var(--rust);"><span>Frankl</span></div>
+      <h3 data-i18n="book3.title">El hombre en busca de sentido</h3>
+      <p class="autor">Viktor Frankl</p>
+      <p class="nota" data-i18n="book3.note">Lo leí en un momento feo y se lo sigo recomendando a gente en momentos feos.</p>
+    </div>
+  </div>
+
+  <details class="book-more">
+    <summary>
+      <span data-i18n="libros.more">Ver más libros</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+    </summary>
+    <div class="book-shelf book-shelf--more">
+      <div class="book">
+        <div class="book-cover" style="background:var(--gold);"><span>Westover</span></div>
+        <h3 data-i18n="book4.title">Educada</h3>
+        <p class="autor">Tara Westover</p>
+        <p class="nota" data-i18n="book4.note">Se la presto a todo el mundo y nunca vuelve.</p>
+      </div>
+      <div class="book">
+        <div class="book-cover" style="background:var(--sage);"><span>Grant</span></div>
+        <h3 data-i18n="book5.title">Los que se atreven a ser diferentes</h3>
+        <p class="autor">Adam Grant</p>
+        <p class="nota" data-i18n="book5.note">Mi excusa favorita para explicar por qué me gustan tanto las startups en etapa temprana.</p>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================
+     3. CONTACTO
+============================================ -->
+<section class="contacto" id="contacto">
+  <h2 class="reveal" data-i18n="contacto.heading">Conectemos</h2>
+
+  <div class="contact-links reveal">
+    <a class="filled" href="mailto:lgoicoechea@itba.edu.ar">
+      lgoicoechea@itba.edu.ar
+    </a>
+    <a href="https://www.linkedin.com/in/lucila-goicoechea/" target="_blank" rel="noopener noreferrer">
+      LinkedIn ↗
+    </a>
+    <a href="https://github.com/lbgoicoechea" target="_blank" rel="noopener noreferrer">
+      Github ↗
+    </a>
+  </div>
+
+  <div class="container">
+    <footer class="foot">
+      <span>Lucila Goicoechea — <span data-i18n="footer.role">Producto &amp; Operaciones</span></span>
+      <span>Buenos Aires, Argentina</span>
+    </footer>
+  </div>
+</section>
+
+<script>
+  document.documentElement.classList.add('js-ready');
+
+  /* ============================================
+     TRADUCCIONES
+  ============================================ */
+  var translations = {
+    es: {
+      "meta.title": "Lucila Goicoechea — Producto & Operaciones",
+      "meta.description": "Espacio personal de Lucila Goicoechea: ingeniera en producto y operaciones. Historia, libros y contacto.",
+      "nav.about": "Mí",
+      "nav.books": "Libros",
+      "nav.contact": "Contacto",
+      "hero.heading": "<span class=\"hero-greeting\">Hola,</span>Soy <em>Lucila Goicoechea</em>.",
+      "hero.sub": "Ingeniera con un máster en negocios y tecnología, y más de 5 años de experiencia en producto y operaciones.",
+      "historia.heading": "Mi historia",
+      "historia.p1": "Arranqué mi recorrido en producto y, con el tiempo, migré hacia operaciones y datos.",
+      "libros.heading": "Libros que me inspiran<br><span class=\"subtitle\">(y recomiendo)</span>",
+      "libros.more": "Ver más libros",
+      "book1.title": "Sapiens",
+      "book1.note": "El que más me hizo cambiar la forma de ver todo lo demás.",
+      "book2.title": "Hábitos atómicos",
+      "book2.note": "Lo tengo más marcado que cualquier manual de la oficina.",
+      "book3.title": "El hombre en busca de sentido",
+      "book3.note": "Lo leí en un momento feo y se lo sigo recomendando a gente en momentos feos.",
+      "book4.title": "Educada",
+      "book4.note": "Se la presto a todo el mundo y nunca vuelve.",
+      "book5.title": "Los que se atreven a ser diferentes",
+      "book5.note": "Mi excusa favorita para explicar por qué me gustan tanto las startups en etapa temprana.",
+      "contacto.heading": "Conectemos",
+      "footer.role": "Producto & Operaciones"
+    },
+    en: {
+      "meta.title": "Lucila Goicoechea — Product & Operations",
+      "meta.description": "Lucila Goicoechea's personal space: an engineer in product and operations. Story, books and contact.",
+      "nav.about": "About",
+      "nav.books": "Books",
+      "nav.contact": "Contact",
+      "hero.heading": "<span class=\"hero-greeting\">Hi,</span>I'm <em>Lucila Goicoechea</em>.",
+      "hero.sub": "Engineer with a master's in business and technology, and 5+ years of experience in product and operations.",
+      "historia.heading": "My story",
+      "historia.p1": "I started out in product and, over time, moved into operations and data.",
+      "libros.heading": "Books that inspire me<br><span class=\"subtitle\">(and that I recommend)</span>",
+      "libros.more": "See more books",
+      "book1.title": "Sapiens",
+      "book1.note": "The one that changed how I see everything else.",
+      "book2.title": "Atomic Habits",
+      "book2.note": "More highlighted than any manual at the office.",
+      "book3.title": "Man's Search for Meaning",
+      "book3.note": "I read it during a rough time, and I still recommend it to people going through rough times.",
+      "book4.title": "Educated",
+      "book4.note": "I lend it to everyone and it never comes back.",
+      "book5.title": "Originals",
+      "book5.note": "My favorite excuse for why I love early-stage startups so much.",
+      "contacto.heading": "Let's connect",
+      "footer.role": "Product & Operations"
+    }
+  };
+
+  function applyLanguage(lang){
+    var dict = translations[lang];
+    if (!dict) return;
+
+    document.documentElement.setAttribute('lang', lang);
+    document.title = dict["meta.title"];
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', dict["meta.description"]);
+
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(function(el){
+      var key = el.getAttribute('data-i18n-html');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+
+    document.querySelectorAll('[data-lang-btn]').forEach(function(btn){
+      btn.classList.toggle('active', btn.getAttribute('data-lang-btn') === lang);
+    });
+  }
+
+  document.querySelectorAll('[data-lang-btn]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      applyLanguage(btn.getAttribute('data-lang-btn'));
+    });
+  });
+
+  // Idioma por defecto: español
+  applyLanguage('es');
+
+  // Masthead: aparece pasado el hero
+  var hero = document.querySelector('.hero');
+  var masthead = document.getElementById('masthead');
+  if (hero && masthead && 'IntersectionObserver' in window){
+    var headObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        masthead.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0.15 });
+    headObs.observe(hero);
+  }
+
+  // Reveal on scroll
+  if ('IntersectionObserver' in window){
+    var items = document.querySelectorAll('.reveal');
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    items.forEach(function(el){ obs.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in-view'); });
+  }
+</script>
+
+</body>
+</html>
