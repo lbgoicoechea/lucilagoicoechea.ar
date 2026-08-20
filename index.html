@@ -171,7 +171,7 @@
      HERO
   ============================================ */
   .hero{
-    min-height:100svh;
+    min-height:88svh;
     display:flex;
     flex-direction:column;
     justify-content:flex-end;
@@ -188,12 +188,12 @@
   .hero-inner{
     position:relative;
     z-index:2;
-    padding:14vh var(--edge) 9vh;
-    max-width:920px;
+    padding:8vh var(--edge) 8vh;
+    max-width:740px;
   }
 
   .hero h1{
-    font-size:clamp(2.1rem, 4.6vw, 3.9rem);
+    font-size:clamp(1.8rem, 3.6vw, 3.1rem);
     font-weight:400;
     color:var(--light);
   }
@@ -201,7 +201,7 @@
     display:block;
     font-family:var(--sans);
     font-weight:300;
-    font-size:0.36em;
+    font-size:0.52em;
     letter-spacing:0.02em;
     color:var(--light-soft);
     margin-bottom:8px;
@@ -268,35 +268,72 @@
     color:var(--ink);
     padding:11vh var(--edge);
   }
-  .historia-grid{
-    max-width:1180px;
+  .historia-card{
+    max-width:680px;
     margin:0 auto;
-    display:grid;
-    grid-template-columns:0.85fr 1.15fr;
-    gap:64px;
   }
-  .historia h2{
+  .historia-card h2{
     font-size:clamp(2.1rem, 3.6vw, 3.1rem);
     color:var(--brown-deep);
-    position:sticky;
-    top:120px;
-    align-self:start;
+    margin-bottom:24px;
   }
-  .historia-text{
-    border-left:1px solid rgba(55,80,95,0.16);
-    padding-left:48px;
-  }
-  .historia-text p{
-    font-size:1.08rem;
+  .historia-summary{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:clamp(1.15rem, 1.9vw, 1.4rem);
+    line-height:1.55;
     color:var(--ink-soft);
-    max-width:560px;
+    margin-bottom:36px;
   }
-  .historia-text p + p{ margin-top:20px; }
 
-  @media (max-width:840px){
-    .historia-grid{ grid-template-columns:1fr; gap:28px; }
-    .historia h2{ position:static; }
-    .historia-text{ border-left:none; padding-left:0; border-top:1px solid rgba(55,80,95,0.16); padding-top:28px; }
+  .historia-more summary{
+    cursor:pointer;
+    list-style:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:13px 26px;
+    border-radius:999px;
+    border:1px solid rgba(55,80,95,0.22);
+    font-family:var(--sans);
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--brown-deep);
+    transition:background 0.25s ease, border-color 0.25s ease;
+  }
+  .historia-more summary::-webkit-details-marker{ display:none; }
+  .historia-more summary::marker{ content:""; }
+  .historia-more summary:hover{ background:rgba(55,80,95,0.06); border-color:rgba(55,80,95,0.4); }
+  .historia-more summary .chevron{ width:13px; height:13px; transition:transform 0.25s ease; }
+  .historia-more[open] summary .chevron{ transform:rotate(180deg); }
+  .historia-more[open] summary{ margin-bottom:32px; }
+
+  .historia-full{
+    border-top:1px solid rgba(55,80,95,0.16);
+    padding-top:32px;
+  }
+  .historia-full p{
+    font-size:1.05rem;
+    line-height:1.75;
+    color:var(--ink-soft);
+  }
+  .historia-full p + p{ margin-top:22px; }
+  .historia-full a{
+    color:var(--gold);
+    text-decoration-color:rgba(208,138,92,0.45);
+    text-underline-offset:3px;
+    transition:text-decoration-color 0.25s ease;
+  }
+  .historia-full a:hover{ text-decoration-color:var(--gold); }
+  .historia-full p:first-of-type::first-letter{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:3.1em;
+    line-height:0.75;
+    float:left;
+    padding-right:8px;
+    padding-top:5px;
+    color:var(--brown-deep);
   }
 
   /* ============================================
@@ -326,20 +363,22 @@
   }
 
   .book-shelf{
-    max-width:760px;
+    max-width:980px;
     margin:0 auto;
     display:grid;
-    grid-template-columns:repeat(3, 1fr);
+    grid-template-columns:repeat(4, 1fr);
     gap:28px;
   }
   .book{
     display:flex;
     flex-direction:column;
+    cursor:pointer;
     transition:transform 0.3s ease;
   }
   .book:nth-child(odd){ transform:rotate(-0.6deg); }
   .book:nth-child(even){ transform:rotate(0.6deg); }
   .book:hover{ transform:translateY(-6px) rotate(0deg); }
+  .book:focus-visible{ outline:2px solid var(--gold); outline-offset:6px; border-radius:4px; }
 
   .book-cover{
     position:relative;
@@ -389,7 +428,6 @@
 
   @media (max-width:640px){
     .book-shelf{ grid-template-columns:1fr 1fr; max-width:480px; gap:20px; }
-    .book-shelf .book:last-child{ grid-column:1 / -1; max-width:220px; margin:0 auto; }
   }
 
   .book-more{
@@ -425,6 +463,145 @@
     gap:28px;
   }
   .book-shelf--more .book{ width:210px; }
+
+  /* ============================================
+     MODAL DE DETALLE DE LIBRO
+  ============================================ */
+  .book-modal{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.25s ease;
+  }
+  .book-modal.is-open{ opacity:1; pointer-events:auto; }
+  .book-modal-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(55,80,95,0.55);
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
+  }
+  .book-modal-panel{
+    position:relative;
+    background:var(--paper);
+    border-radius:18px;
+    max-width:640px;
+    width:100%;
+    max-height:85vh;
+    overflow-y:auto;
+    padding:40px;
+    box-shadow:0 30px 60px -20px rgba(55,80,95,0.4);
+    transform:translateY(16px);
+    transition:transform 0.25s ease;
+  }
+  .book-modal.is-open .book-modal-panel{ transform:translateY(0); }
+  .book-modal-close{
+    position:absolute;
+    top:18px;
+    right:18px;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    border:1px solid rgba(55,80,95,0.2);
+    background:transparent;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--brown-deep);
+    transition:background 0.2s ease;
+  }
+  .book-modal-close svg{ width:16px; height:16px; }
+  .book-modal-close:hover{ background:rgba(55,80,95,0.08); }
+
+  .book-modal-header{
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+    margin-bottom:28px;
+    padding-right:36px;
+  }
+  .book-modal-cover{
+    width:64px;
+    flex-shrink:0;
+    aspect-ratio:2 / 3;
+    border-radius:3px 8px 8px 3px;
+    box-shadow:0 10px 18px -10px rgba(55,80,95,0.4);
+  }
+  .book-modal-header h3{
+    font-size:1.4rem;
+    color:var(--brown-deep);
+    margin-bottom:4px;
+    line-height:1.25;
+  }
+  .book-modal-header .autor{
+    font-size:0.9rem;
+    color:var(--ink-faint);
+  }
+
+  .book-modal-note{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.1rem;
+    line-height:1.7;
+    color:var(--ink-soft);
+  }
+
+  .book-modal-rich section + section{ margin-top:30px; }
+  .book-modal-rich h4{
+    font-family:var(--sans);
+    font-size:0.75rem;
+    font-weight:700;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:12px;
+  }
+  .book-modal-rich section p{
+    font-size:1rem;
+    line-height:1.75;
+    color:var(--ink-soft);
+  }
+  .idea-list{ list-style:none; }
+  .idea-list li + li{
+    margin-top:18px;
+    padding-top:18px;
+    border-top:1px solid rgba(55,80,95,0.12);
+  }
+  .idea-list .idea-concept{
+    display:block;
+    font-weight:700;
+    color:var(--brown-deep);
+    margin-bottom:4px;
+  }
+  .idea-list .idea-explain{
+    display:block;
+    font-size:0.95rem;
+    line-height:1.5;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .idea-list .idea-quote{
+    display:block;
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:0.95rem;
+    color:var(--ink-faint);
+  }
+
+  @media (max-width:640px){
+    .book-modal{ padding:14px; }
+    .book-modal-panel{ padding:28px 22px; max-height:88vh; }
+    .book-modal-header{ gap:14px; }
+    .book-modal-cover{ width:52px; }
+    .book-modal-header h3{ font-size:1.2rem; }
+  }
 
   /* ============================================
      SECTION: CONTACTO (bookend oscuro)
@@ -490,7 +667,8 @@
   ============================================ */
   @media (max-width:640px){
     :root{ --edge:6.5vw; }
-    .hero-inner{ padding-top:20vh; }
+    .hero{ min-height:78svh; }
+    .hero-inner{ padding-top:7vh; }
     .historia, .libros, .contacto{ padding-top:9vh; padding-bottom:9vh; }
   }
 </style>
@@ -521,7 +699,7 @@
 <header class="hero textured" id="top">
   <div class="hero-inner">
     <h1 data-i18n-html="hero.heading"><span class="hero-greeting">Hola,</span>Soy <em>Lucila Goicoechea</em>.</h1>
-    <p class="hero-sub" data-i18n="hero.sub">Ingeniera con un máster en negocios y tecnología, y más de 5 años de experiencia en producto y operaciones.</p>
+    <p class="hero-sub" data-i18n="hero.sub">Ingeniera química con experiencia en liderazgo de producto y operaciones, especializada en startups de tecnología agropecuaria, con foco en crecimiento y escalabilidad.</p>
     <div class="hero-links">
       <a class="pill" href="https://www.linkedin.com/in/lucila-goicoechea/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a class="pill" href="mailto:lgoicoechea@itba.edu.ar">Email</a>
@@ -531,14 +709,26 @@
 </header>
 
 <!-- ============================================
-     1. UN POCO DE MÍ
+     1. MI HISTORIA
 ============================================ -->
 <section class="historia" id="historia">
-  <div class="historia-grid">
-    <h2 class="reveal" data-i18n="historia.heading">Mi historia</h2>
-    <div class="historia-text reveal">
-      <p data-i18n="historia.p1">Arranqué mi recorrido en producto y, con el tiempo, migré hacia operaciones y datos.</p>
-    </div>
+  <div class="historia-card reveal">
+    <h2 data-i18n="historia.heading">Mi historia</h2>
+    <p class="historia-summary" data-i18n="historia.summary">Soy ingeniera química. Pasé los últimos años armando producto, operaciones y equipos en una startup agtech, y hoy busco el próximo desafío profesional.</p>
+
+    <details class="historia-more">
+      <summary>
+        <span data-i18n="historia.readMore">Leer mi historia completa</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="historia-full">
+        <p data-i18n="historia.full.p1">Soy de la ciudad de Formosa, muy al norte del país, hija de contadores, y desde chica me imaginaba en lugares que no tenían mucho que ver con lo que conocía en casa. La curiosidad, las ganas de enfrentarme a algún desafío muy grande me llevó a querer estudiar Ingeniería Química en el ITBA.</p>
+        <p data-i18n="historia.full.p2">Después de una pasantía en SUEZ (donde aprendí, por contraste, que el impacto inmediato me atrae más que el protocolo por el protocolo mismo) encontré mi lugar en AgroPro, una startup que estaba construyendo una plataforma de gestión para el agro desde cero. Ahí me enamoré del negocio de punta a punta: pasé por producto, operaciones, customer success y ventas, no por plan de carrera sino porque siempre había un lugar que cubrir. De ese recorrido aprendí que la venta pura no es lo mío, pero que escuchar, hacer las preguntas correctas y traducir valor sí quedaron conmigo.</p>
+        <p data-i18n="historia.full.p3">En mis últimos años ahí lideré la operación: armé procesos desde cero, atravesé una crisis de equipo y lo reconstruí, y entendí cuál es mi verdadero diferencial: la conexión entre lo técnico y lo estratégico. Datos, procesos, eficiencia, y la capacidad de trabajar con stakeholders muy distintos sin perder de vista el negocio.</p>
+        <p data-i18n-html="historia.full.p4">Buscando estructura y marco teórico donde antes solo había improvisación, hice un Máster en Negocios y Tecnología en la Universidad de San Andrés, con una tesis sobre crowdfunding agropecuario (Para quien quiera conocer más del proyecto, el link está acá: <a href="https://mingo.ar/" target="_blank" rel="noopener noreferrer">mingo.ar</a>.) Ahí también encontré un modelo a seguir: una compañera que, a sus 60 años, no dejaba de aprender ni de formar a los equipos a su alrededor. Quiero ser eso.</p>
+        <p data-i18n="historia.full.p5">Hoy busco un nuevo desafío profesional: algo donde pueda seguir uniendo lo técnico con lo estratégico, con más estructura y más herramientas que las que tenía cuando empecé. Y en este espacio quiero ir dejando plasmadas lecciones, aprendizajes, y un poco de lo que voy leyendo y me gusta compartir...</p>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -547,10 +737,16 @@
 ============================================ -->
 <section class="libros" id="libros">
   <div class="section-head reveal">
-    <h2 data-i18n-html="libros.heading">Libros que me inspiran<br><span class="subtitle">(y recomiendo)</span></h2>
+    <h2 data-i18n-html="libros.heading">Libros que recomiendo<br><span class="subtitle">(y uso de guía tanto en la vida como en el trabajo)</span></h2>
   </div>
 
   <div class="book-shelf">
+    <div class="book reveal" data-rich="norman">
+      <div class="book-cover" style="background:var(--brown-deep);"><span>Norman</span></div>
+      <h3 data-i18n="book0.title">El diseño de los objetos cotidianos</h3>
+      <p class="autor">Don Norman</p>
+      <p class="nota" data-i18n="book0.note">El que más me cambió la forma de mirar el diseño de las cosas.</p>
+    </div>
     <div class="book reveal">
       <div class="book-cover" style="background:var(--brown-mid);"><span>Harari</span></div>
       <h3 data-i18n="book1.title">Sapiens</h3>
@@ -593,6 +789,42 @@
   </details>
 </section>
 
+<!-- Modal de detalle de libro -->
+<div class="book-modal" id="book-modal" aria-hidden="true">
+  <div class="book-modal-backdrop" data-modal-close></div>
+  <div class="book-modal-panel" role="dialog" aria-modal="true" aria-labelledby="book-modal-title">
+    <button type="button" class="book-modal-close" data-modal-close aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="book-modal-header">
+      <div class="book-modal-cover" id="book-modal-cover"></div>
+      <div>
+        <h3 id="book-modal-title"></h3>
+        <p class="autor" id="book-modal-author"></p>
+      </div>
+    </div>
+    <div class="book-modal-body">
+      <div class="book-modal-simple" id="book-modal-simple">
+        <p class="book-modal-note" id="book-modal-note"></p>
+      </div>
+      <div class="book-modal-rich" id="book-modal-rich" hidden>
+        <section>
+          <h4 id="book-modal-when-title"></h4>
+          <p id="book-modal-when-text"></p>
+        </section>
+        <section>
+          <h4 id="book-modal-ideas-title"></h4>
+          <ul class="idea-list" id="book-modal-idea-list"></ul>
+        </section>
+        <section>
+          <h4 id="book-modal-why-title"></h4>
+          <p id="book-modal-why-text"></p>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ============================================
      3. CONTACTO
 ============================================ -->
@@ -623,6 +855,55 @@
   document.documentElement.classList.add('js-ready');
 
   /* ============================================
+     CONTENIDO ENRIQUECIDO DE LIBROS (vista de detalle)
+  ============================================ */
+  var bookRichDetails = {
+    es: {
+      norman: {
+        whenTitle: "¿Cuándo lo leí?",
+        whenText: "Mayo 2026, en el viaje a Japón. Recuerdos de estar en el tren, yendo de Tokio a Kanazawa, y a Takayama. En cada momento libre que tenía en ese viaje fui leyendo, y me fui obsesionando más por mirar mucho más de cerca el diseño de las cosas que me rodeaban.",
+        ideasTitle: "Ideas clave",
+        ideas: [
+          { concept: "Affordances y señalizadores", explain: "Los objetos comunican cómo usarlos, no solo qué permiten hacer.", quote: "Dos de las características más importantes del buen diseño son la posibilidad de descubrimiento y la comprensión." },
+          { concept: "Diseño como comunicación", explain: "Un objeto bien diseñado se explica solo, sin necesidad de instrucciones.", quote: "El diseño es realmente un acto de comunicación..." },
+          { concept: "La puerta de Norman", explain: "Cuando un objeto necesita un cartel para explicarse, el diseño ya falló.", quote: "Que los carteles sean innecesarios." },
+          { concept: "Mapeo", explain: "La disposición de los controles debe reflejar intuitivamente sus efectos.", quote: "Lograr que los mapeos sean correctos." },
+          { concept: "Retroalimentación y las brechas de ejecución/evaluación", explain: "El sistema debe hacer visible lo que está pasando.", quote: "Salvar las brechas de Ejecución y Evaluación haciendo las cosas visibles." },
+          { concept: "Modelos conceptuales", explain: "El sistema debe coincidir con la forma en que la gente piensa.", quote: "El sistema debería ajustarse a la forma en que la gente piensa y trabaja." },
+          { concept: "Restricciones", explain: "Bien usadas, evitan errores antes de que ocurran.", quote: "Explotar el poder de las restricciones." },
+          { concept: "El error es del diseño, no del usuario", explain: "Norman defiende una postura fuerte: no es culpa nuestra.", quote: "Es el deber de las máquinas, y de quienes las diseñan, entender a las personas." },
+          { concept: "Diseñar para el error", explain: "No alcanza con evitarlo; hay que anticiparlo.", quote: "Diseñar para el error." },
+          { concept: "Complejidad ≠ confusión", explain: "Un sistema puede ser complejo sin ser incomprensible, si está bien organizado.", quote: "El buen diseño es en realidad mucho más difícil de notar que el mal diseño." }
+        ],
+        whyTitle: "Por qué leerlo",
+        whyText: "Porque cambia para siempre la forma en que mirás el mundo. Después de leerlo, dejás de pensar \"soy torpe\" cuando no encontrás cómo abrir una puerta o usar una canilla, y empezás a pensar \"esto está mal diseñado\"."
+      }
+    },
+    en: {
+      norman: {
+        whenTitle: "When I read it",
+        whenText: "May 2026, on the trip to Japan. I remember being on the train, going from Tokyo to Kanazawa, and to Takayama. In every free moment I had on that trip I kept reading, and I got more and more obsessed with looking closely at the design of everything around me.",
+        ideasTitle: "Key ideas",
+        ideas: [
+          { concept: "Affordances and signifiers", explain: "Objects communicate how to use them, not just what they allow.", quote: "Two of the most important characteristics of good design are discoverability and understanding." },
+          { concept: "Design as communication", explain: "A well-designed object explains itself, no instructions needed.", quote: "Design is really an act of communication..." },
+          { concept: "The Norman door", explain: "When an object needs a sign to explain itself, the design already failed.", quote: "Make signs unnecessary." },
+          { concept: "Mapping", explain: "The layout of controls should intuitively reflect their effects.", quote: "Get the mappings right." },
+          { concept: "Feedback and the gulfs of execution/evaluation", explain: "The system should make what's happening visible.", quote: "Bridge the Gulfs of Execution and Evaluation by making things visible." },
+          { concept: "Conceptual models", explain: "The system should match how people think.", quote: "The system should match the way people think and work." },
+          { concept: "Constraints", explain: "Used well, they prevent errors before they happen.", quote: "Exploit the power of constraints." },
+          { concept: "The error is the design's, not the user's", explain: "Norman takes a strong stance: it's not our fault.", quote: "It's the duty of machines, and those who design them, to understand people." },
+          { concept: "Design for error", explain: "Avoiding it isn't enough — you have to anticipate it.", quote: "Design for error." },
+          { concept: "Complexity ≠ confusion", explain: "A system can be complex without being incomprehensible, if it's well organized.", quote: "Good design is actually a lot harder to notice than bad design." }
+        ],
+        whyTitle: "Why read it",
+        whyText: "Because it changes the way you see the world for good. After reading it, you stop thinking \"I'm clumsy\" when you can't figure out how to open a door or work a faucet, and start thinking \"this is badly designed\" instead."
+      }
+    }
+  };
+  var currentLang = 'es';
+
+  /* ============================================
      TRADUCCIONES
   ============================================ */
   var translations = {
@@ -633,11 +914,19 @@
       "nav.books": "Libros",
       "nav.contact": "Contacto",
       "hero.heading": "<span class=\"hero-greeting\">Hola,</span>Soy <em>Lucila Goicoechea</em>.",
-      "hero.sub": "Ingeniera con un máster en negocios y tecnología, y más de 5 años de experiencia en producto y operaciones.",
+      "hero.sub": "Ingeniera química con experiencia en liderazgo de producto y operaciones, especializada en startups de tecnología agropecuaria, con foco en crecimiento y escalabilidad.",
       "historia.heading": "Mi historia",
-      "historia.p1": "Arranqué mi recorrido en producto y, con el tiempo, migré hacia operaciones y datos.",
-      "libros.heading": "Libros que me inspiran<br><span class=\"subtitle\">(y recomiendo)</span>",
+      "historia.summary": "Soy ingeniera química. Pasé los últimos años armando producto, operaciones y equipos en una startup agtech, y hoy busco el próximo desafío profesional.",
+      "historia.readMore": "Leer mi historia completa",
+      "historia.full.p1": "Soy de la ciudad de Formosa, muy al norte del país, hija de contadores, y desde chica me imaginaba en lugares que no tenían mucho que ver con lo que conocía en casa. La curiosidad, las ganas de enfrentarme a algún desafío muy grande me llevó a querer estudiar Ingeniería Química en el ITBA.",
+      "historia.full.p2": "Después de una pasantía en SUEZ (donde aprendí, por contraste, que el impacto inmediato me atrae más que el protocolo por el protocolo mismo) encontré mi lugar en AgroPro, una startup que estaba construyendo una plataforma de gestión para el agro desde cero. Ahí me enamoré del negocio de punta a punta: pasé por producto, operaciones, customer success y ventas, no por plan de carrera sino porque siempre había un lugar que cubrir. De ese recorrido aprendí que la venta pura no es lo mío, pero que escuchar, hacer las preguntas correctas y traducir valor sí quedaron conmigo.",
+      "historia.full.p3": "En mis últimos años ahí lideré la operación: armé procesos desde cero, atravesé una crisis de equipo y lo reconstruí, y entendí cuál es mi verdadero diferencial: la conexión entre lo técnico y lo estratégico. Datos, procesos, eficiencia, y la capacidad de trabajar con stakeholders muy distintos sin perder de vista el negocio.",
+      "historia.full.p4": "Buscando estructura y marco teórico donde antes solo había improvisación, hice un Máster en Negocios y Tecnología en la Universidad de San Andrés, con una tesis sobre crowdfunding agropecuario (Para quien quiera conocer más del proyecto, el link está acá: <a href=\"https://mingo.ar/\" target=\"_blank\" rel=\"noopener noreferrer\">mingo.ar</a>.) Ahí también encontré un modelo a seguir: una compañera que, a sus 60 años, no dejaba de aprender ni de formar a los equipos a su alrededor. Quiero ser eso.",
+      "historia.full.p5": "Hoy busco un nuevo desafío profesional: algo donde pueda seguir uniendo lo técnico con lo estratégico, con más estructura y más herramientas que las que tenía cuando empecé. Y en este espacio quiero ir dejando plasmadas lecciones, aprendizajes, y un poco de lo que voy leyendo y me gusta compartir...",
+      "libros.heading": "Libros que recomiendo<br><span class=\"subtitle\">(y uso de guía tanto en la vida como en el trabajo)</span>",
       "libros.more": "Ver más libros",
+      "book0.title": "El diseño de los objetos cotidianos",
+      "book0.note": "El que más me cambió la forma de mirar el diseño de las cosas.",
       "book1.title": "Sapiens",
       "book1.note": "El que más me hizo cambiar la forma de ver todo lo demás.",
       "book2.title": "Hábitos atómicos",
@@ -658,11 +947,19 @@
       "nav.books": "Books",
       "nav.contact": "Contact",
       "hero.heading": "<span class=\"hero-greeting\">Hi,</span>I'm <em>Lucila Goicoechea</em>.",
-      "hero.sub": "Engineer with a master's in business and technology, and 5+ years of experience in product and operations.",
+      "hero.sub": "Chemical engineer with experience in product leadership and operations, specializing in agricultural technology startups, focused on growth and scalability.",
       "historia.heading": "My story",
-      "historia.p1": "I started out in product and, over time, moved into operations and data.",
-      "libros.heading": "Books that inspire me<br><span class=\"subtitle\">(and that I recommend)</span>",
+      "historia.summary": "I'm a chemical engineer. I spent the last few years building product, operations, and teams at an agtech startup, and today I'm looking for my next professional challenge.",
+      "historia.readMore": "Read my full story",
+      "historia.full.p1": "I'm from the city of Formosa, way up in the north of the country, the daughter of accountants, and even as a kid I pictured myself in places that had little to do with what I knew at home. Curiosity, and wanting to take on something really big, is what led me to study Chemical Engineering at ITBA.",
+      "historia.full.p2": "After an internship at SUEZ (where I learned, by contrast, that immediate impact draws me in more than protocol for its own sake) I found my place at AgroPro, a startup building an agricultural management platform from scratch. That's where I fell in love with the business end to end: I moved through product, operations, customer success, and sales, not because of some career plan but because there was always a gap to fill. From that path I learned that pure sales isn't for me, but listening, asking the right questions, and translating value stuck with me.",
+      "historia.full.p3": "In my last few years there I led the operation: built processes from scratch, went through a team crisis and rebuilt it, and figured out what my real differentiator is: the connection between the technical and the strategic. Data, processes, efficiency, and the ability to work with very different stakeholders without losing sight of the business.",
+      "historia.full.p4": "Looking for structure and a theoretical framework where before there was only improvisation, I did a Master's in Business and Technology at Universidad de San Andrés, with a thesis on agricultural crowdfunding (If you'd like to know more about the project, the link is here: <a href=\"https://mingo.ar/\" target=\"_blank\" rel=\"noopener noreferrer\">mingo.ar</a>.) There I also found a role model: a classmate who, at 60, never stopped learning or training the teams around her. I want to be that.",
+      "historia.full.p5": "Today I'm looking for a new professional challenge: something where I can keep connecting the technical with the strategic, with more structure and better tools than I had when I started. And in this space, I want to keep sharing lessons, things I'm learning, and a bit of what I'm reading and enjoy sharing...",
+      "libros.heading": "Books I recommend<br><span class=\"subtitle\">(and use as a guide, in life and at work)</span>",
       "libros.more": "See more books",
+      "book0.title": "The Design of Everyday Things",
+      "book0.note": "The one that changed how I look at the design of things.",
       "book1.title": "Sapiens",
       "book1.note": "The one that changed how I see everything else.",
       "book2.title": "Atomic Habits",
@@ -681,6 +978,7 @@
   function applyLanguage(lang){
     var dict = translations[lang];
     if (!dict) return;
+    currentLang = lang;
 
     document.documentElement.setAttribute('lang', lang);
     document.title = dict["meta.title"];
@@ -704,11 +1002,113 @@
   document.querySelectorAll('[data-lang-btn]').forEach(function(btn){
     btn.addEventListener('click', function(){
       applyLanguage(btn.getAttribute('data-lang-btn'));
+      closeBookModal();
     });
   });
 
   // Idioma por defecto: español
   applyLanguage('es');
+
+  /* ============================================
+     MODAL DE DETALLE DE LIBRO
+  ============================================ */
+  var bookModal = document.getElementById('book-modal');
+  var modalCover = document.getElementById('book-modal-cover');
+  var modalTitle = document.getElementById('book-modal-title');
+  var modalAuthor = document.getElementById('book-modal-author');
+  var modalSimple = document.getElementById('book-modal-simple');
+  var modalNote = document.getElementById('book-modal-note');
+  var modalRich = document.getElementById('book-modal-rich');
+  var modalWhenTitle = document.getElementById('book-modal-when-title');
+  var modalWhenText = document.getElementById('book-modal-when-text');
+  var modalIdeasTitle = document.getElementById('book-modal-ideas-title');
+  var modalIdeaList = document.getElementById('book-modal-idea-list');
+  var modalWhyTitle = document.getElementById('book-modal-why-title');
+  var modalWhyText = document.getElementById('book-modal-why-text');
+  var lastFocusedBook = null;
+
+  function openBookModal(card){
+    var titleEl = card.querySelector('h3');
+    var authorEl = card.querySelector('.autor');
+    var noteEl = card.querySelector('.nota');
+    var coverEl = card.querySelector('.book-cover');
+
+    modalCover.style.background = coverEl ? coverEl.style.background : '';
+    modalTitle.textContent = titleEl ? titleEl.textContent : '';
+    modalAuthor.textContent = authorEl ? authorEl.textContent : '';
+
+    var richId = card.getAttribute('data-rich');
+    var rich = richId && bookRichDetails[currentLang] ? bookRichDetails[currentLang][richId] : null;
+
+    if (rich){
+      modalSimple.hidden = true;
+      modalRich.hidden = false;
+      modalWhenTitle.textContent = rich.whenTitle;
+      modalWhenText.textContent = rich.whenText;
+      modalIdeasTitle.textContent = rich.ideasTitle;
+      modalWhyTitle.textContent = rich.whyTitle;
+      modalWhyText.textContent = rich.whyText;
+      modalIdeaList.innerHTML = '';
+      rich.ideas.forEach(function(idea){
+        var li = document.createElement('li');
+
+        var concept = document.createElement('span');
+        concept.className = 'idea-concept';
+        concept.textContent = idea.concept;
+
+        var explain = document.createElement('span');
+        explain.className = 'idea-explain';
+        explain.textContent = idea.explain;
+
+        var quote = document.createElement('span');
+        quote.className = 'idea-quote';
+        quote.textContent = '\u201c' + idea.quote + '\u201d';
+
+        li.appendChild(concept);
+        li.appendChild(explain);
+        li.appendChild(quote);
+        modalIdeaList.appendChild(li);
+      });
+    } else {
+      modalRich.hidden = true;
+      modalSimple.hidden = false;
+      modalNote.textContent = noteEl ? noteEl.textContent : '';
+    }
+
+    lastFocusedBook = card;
+    bookModal.classList.add('is-open');
+    bookModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    var closeBtn = bookModal.querySelector('.book-modal-close');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeBookModal(){
+    if (!bookModal.classList.contains('is-open')) return;
+    bookModal.classList.remove('is-open');
+    bookModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocusedBook) lastFocusedBook.focus();
+  }
+
+  document.querySelectorAll('.book').forEach(function(card){
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.addEventListener('click', function(){ openBookModal(card); });
+    card.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        openBookModal(card);
+      }
+    });
+  });
+
+  bookModal.querySelectorAll('[data-modal-close]').forEach(function(el){
+    el.addEventListener('click', closeBookModal);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeBookModal();
+  });
 
   // Masthead: aparece pasado el hero
   var hero = document.querySelector('.hero');
